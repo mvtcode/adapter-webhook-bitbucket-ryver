@@ -5,6 +5,8 @@ const axios = require('axios');
 exports.handler = async (event) => {
 	const body = JSON.parse(event.body);
 	const repository_name = body.repository.name;
+	const repository_url = body.repository.links.html.href;
+	const repository_avatar = body.repository.links.avatar.href;
 
 	const messages = [];
 
@@ -15,7 +17,7 @@ exports.handler = async (event) => {
 			// link: change.new.target.links.html.href,
 			// author: change.new.target.author.raw,
 			// comment: change.new.target.message
-			`User: **${change.new.target.author.raw}**\n> Comment: **[${change.new.target.message}](${change.new.target.links.html.href})**`
+			`Branch: **${change.new.name}** | User: **${change.new.target.author.raw}**\n> Comment: **[${change.new.target.message}](${change.new.target.links.html.href})**`
 		);
 	});
 
@@ -23,9 +25,9 @@ exports.handler = async (event) => {
 		await axios.post(process.env.endpoint, {
 			createSource: {
 				displayName: 'BitBucket',
-				avatar: 'https://wac-cdn.atlassian.com/dam/jcr:a17e66da-d0a1-4912-878c-6e103111b9df/Bitbucket-icon-blue-rgb.svg?cdnVersion=550'
+				avatar: repository_avatar
 			},
-			body: `Repository: **${repository_name}**\n ${messages.join('\n')}`
+			body: `Repository: **[${repository_name}](${repository_url})**\n ${messages.join('\n')}`
 		});
 
 		return {
