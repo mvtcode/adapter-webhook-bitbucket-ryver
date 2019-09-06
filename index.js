@@ -14,10 +14,11 @@ exports.handler = async (event) => {
 	changes.forEach(change => {
 		messages.push(
 			// branch: change.new.name,
-			// link: change.new.target.links.html.href,
+			// branch_link: change.new.links.html.href,
+			// hash_link: change.new.target.links.html.href,
 			// author: change.new.target.author.raw,
 			// comment: change.new.target.message
-			`Branch: **${change.new.name}** | User: **${change.new.target.author.raw}**\n> Comment: **[${change.new.target.message}](${change.new.target.links.html.href})**`
+			`Branch: **[${change.new.name}](${change.new.links.html.href})** | User: **${change.new.target.author.raw}**\n> Comment: **[${change.new.target.message}](${change.new.target.links.html.href})**`
 		);
 	});
 
